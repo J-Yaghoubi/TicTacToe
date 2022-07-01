@@ -1,46 +1,70 @@
 
-import settings as se
-import menu as mu
-import utility
-import time
+from pynput import keyboard
+import funcs
+
 
 class TicTacToe:
 
+    class Meta:
+        menu_explorer = 'Main'
+        counter = 0
+
+    def __init__(self) -> None:
+        self.animate_logo()
+        self.show_logo()
+        self.show_menu()
+        self.scan_input()
+
     def animate_logo(self):
-        for i in range(0,7):
-            utility.clear_screen()
-            time.sleep(0.3)
-            print('\n\n\n\n\n\n')
-            print('\u001b[32m' + mu.LOGO) 
-            
-
+        funcs.animate_logo()
+    
     def show_logo(self):
-        utility.clear_screen()
-        print('\n\n' + mu.dash_line)
-        print('\u001b[32m' + mu.LOGO) 
-        print('\n') 
+        funcs.show_logo()
+
+    @classmethod
+    def show_menu(cls):
+        funcs.show_menu(cls.Meta.counter)
+
+    @staticmethod
+    def enter_menu(selected):
+        if   selected == 0: funcs.show_board()
+        elif selected == 1: funcs.show_about()
+        elif selected == 2: funcs.show_about()
+        elif selected == 3: funcs.show_about()
+        elif selected == 4: exit()
 
 
-    def show_menu(self, input_key : int):
-        selected = ['[*' if i == input_key else '[ ' for i in range(len(mu.main_menu))]
-        [print(se.MENU_COLOR + se.MARGIN + selected[i] + mu.main_menu[i]) for i in range(len(mu.main_menu))]
-        print('\n\n' + mu.dash_line)
-        print(mu.main_menu_help)
+    def scan_input(self):
+
+        with keyboard.Events() as events:
+            for event in events:
+                event = events.get(1.0)
+
+                if  self.__class__.Meta.menu_explorer == 'Main':
+
+                    # Read Key
+                    if event.key == keyboard.Key.up and self.__class__.Meta.counter > 0:
+                        self.__class__.Meta.counter-=1
+
+                    elif event.key == keyboard.Key.down and self.__class__.Meta.counter < 4:
+                        self.__class__.Meta.counter+=1  
+
+                    elif event.key == keyboard.Key.enter:   
+                        self.__class__.enter_menu(self.__class__.Meta.counter)
+                        break 
+
+                    # Refresh menu
+                    self.show_logo()
+                    self.show_menu()   
+
+                elif self.__class__.menu_explorer == 'Start':
+                    pass
+
+                else:
+                    pass
 
 
-    def show_board(self):
-        print(se.BOARD_COLOR + se.BOARD_MARGIN + '+---------------+')
-        for i in range(0,9,3):
-            print(se.BOARD_COLOR + se.BOARD_MARGIN + ' '.join(mu.BOARD[i:i+3]))
-            print(se.BOARD_COLOR + se.BOARD_MARGIN + '+---------------+')
-        print('\n\n' + mu.dash_line)
-        print(mu.main_menu_help)
 
-
-
-game = TicTacToe()
-game.animate_logo()
-game.show_logo()
-game.show_board()
+game= TicTacToe()
 
 
