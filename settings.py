@@ -4,7 +4,7 @@
 """ White Spaces """
 MARGIN = ' ' * 26
 START_MARGIN = ' ' * 8
-BOARD_MARGIN = ' ' * 24   
+BOARD_MARGIN = ' ' * 26   
 
 
 
