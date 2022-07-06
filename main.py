@@ -1,5 +1,5 @@
 
-
+import sys
 from pynput import keyboard
 from funcs import functionality as fn
 import settings as se
@@ -8,16 +8,20 @@ import settings as se
 class TicTacToe:
 
     class Meta:
+        """
+            This meta class use as a database for live data
+        """
 
         position = 'Main'
         counter = 0
         game_process = ['.', '.', '.', '.', '.', '.', '.', '.', '.']
-        win_algo = [('PPP......'), ('...PPP...'), ('......PPP'), ('P..P..P..'), ('.P..P..P.'), ('..P..P..P'), ('P...P...P'), ('..P.P.P..')]
+        win_algo = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
         player_one = True
 
         p_one_name = 'Player One'
         p_two_name = 'Player Two'
 
+        numeric_key = 0
 
     def __init__(self) -> None:
         self.animate_logo()
@@ -48,15 +52,11 @@ class TicTacToe:
     def ask_name(cls):
 
         fn.show_logo()
-
         cls.Meta.position = 'AskName'
         
-        # a = None
-        # b = None
-
-        # while not a:
-        #     a = input('\nEnter Player One Name: ')
-        #     b = input('\nEnter Player TWo Name: ')
+        # while not cls.Meta.p_one_name:
+        #     cls.Meta.p_one_name = input('\nEnter Player One Name: ')
+        #     cls.Meta.p_two_name = input('\nEnter Player TWo Name: ')
 
         cls.show_board()
 
@@ -87,40 +87,45 @@ class TicTacToe:
 
     @classmethod
     def save_and_check(cls, num):
-        
+        """
+            Save User selection and check if there is a winner or the game has be ended without any winner   
+        """
+
+        end = False
+
         # Save player select
         cls.Meta.game_process[num] = 'X' if cls.Meta.player_one else 'O'
+   
+        # Search for winner
+        for i in range(len(cls.Meta.win_algo)):
+            if cls.Meta.game_process[cls.Meta.win_algo[i][0]] == cls.Meta.game_process[cls.Meta.win_algo[i][1]] == cls.Meta.game_process[cls.Meta.win_algo[i][2]] == cls.Meta.game_process[num]: 
+                cls.Meta.position = 'Win'
+                end = True
+                fn.show_win('Player One') if cls.Meta.player_one else fn.show_win('Player Two')
 
-        # Check for wining pattern
-        p_one_temp_list = []
-        p_two_temp_list = []
-
-        if cls.Meta.player_one:     
-            p_one_temp_list = "".join(['P' if i == 'X' else '.' for i in cls.Meta.game_process])    
-        else:
-            p_two_temp_list = "".join(['P' if i == 'O' else '.' for i in cls.Meta.game_process])   
-
-        if p_one_temp_list in cls.Meta.win_algo:
+        # if board is full without winner
+        if not '.' in cls.Meta.game_process:
             cls.Meta.position = 'Win'
-            fn.show_win('Player One')
-        elif p_two_temp_list in cls.Meta.win_algo:
-            cls.Meta.position = 'Win'
-            fn.show_win('Player One')
-       
-        else:    
-            # Toggle player
+            end = True
+            fn.show_win('No One Wins')             
+             
+        # if game is in process then: Toggle player and Update the Board
+        if not end:
             cls.Meta.player_one = not cls.Meta.player_one  
-            # Update Board
             cls.show_board()
         
     @classmethod
     def scan_input(cls):
+        """
+            after giving valid request from user, we break the While loop and stop keyboard listener,
+            then we go to new location depends on user selection
+        """
 
         with keyboard.Events() as events:
             for event in events:
                 event = events.get(1.0)
                
-                # MainMenu Scan
+                # Main-Menu Scan
                 if  cls.Meta.position == 'Main':
 
                     if event.key == keyboard.Key.up and cls.Meta.counter > 0:
@@ -130,11 +135,10 @@ class TicTacToe:
                         cls.Meta.counter+=1  
 
                     elif event.key == keyboard.Key.esc:
-                        exit()
+                        sys.exit()
 
-                    elif event.key == keyboard.Key.enter:   
-                        cls.enter_menu(cls.Meta.counter)
-                        break 
+                    elif event.key == keyboard.Key.enter:  
+                        break                   
 
                     # Refresh menu
                     cls.show_menu()   
@@ -142,60 +146,61 @@ class TicTacToe:
                 # About Scan
                 elif cls.Meta.position == 'About' or cls.Meta.position == 'AskName' or cls.Meta.position == 'Settings' or cls.Meta.position == 'Score':
                     if event.key == keyboard.Key.esc:
-                        cls.show_menu() 
-                        break
+                        break                        
                 
                 # Board Scan
                 elif cls.Meta.position == 'Board':               
                     if event.key == keyboard.Key.esc:
                         cls.show_menu() 
-                        break
 
-                    elif event.key == keyboard.KeyCode(char= '1') and cls.Meta.game_process [0] == '.':
-                        cls.save_and_check(0)
+                    elif event.key == keyboard.KeyCode(char= '1') and cls.Meta.game_process[0] == '.':
+                        cls.Meta.numeric_key = 0
                         break
                     
-                    elif event.key == keyboard.KeyCode(char= '2') and cls.Meta.game_process [1] == '.':
-                        cls.save_and_check(1)
+                    elif event.key == keyboard.KeyCode(char= '2') and cls.Meta.game_process[1] == '.':
+                        cls.Meta.numeric_key = 1
                         break
                     
-                    elif event.key == keyboard.KeyCode(char= '3') and cls.Meta.game_process [2] == '.':
-                        cls.save_and_check(2)
+                    elif event.key == keyboard.KeyCode(char= '3') and cls.Meta.game_process[2] == '.':
+                        cls.Meta.numeric_key = 2
                         break
                     
-                    elif event.key == keyboard.KeyCode(char= '4') and cls.Meta.game_process [3] == '.':
-                        cls.save_and_check(3)
+                    elif event.key == keyboard.KeyCode(char= '4') and cls.Meta.game_process[3] == '.':
+                        cls.Meta.numeric_key = 3
                         break
                     
-                    elif event.key == keyboard.KeyCode(char= '5') and cls.Meta.game_process [4] == '.':
-                        cls.save_and_check(4)
+                    elif event.key == keyboard.KeyCode(char= '5') and cls.Meta.game_process[4] == '.':
+                        cls.Meta.numeric_key = 4
                         break
                    
-                    elif event.key == keyboard.KeyCode(char= '6') and cls.Meta.game_process [5] == '.':
-                        cls.save_and_check(5)
+                    elif event.key == keyboard.KeyCode(char= '6') and cls.Meta.game_process[5] == '.':
+                        cls.Meta.numeric_key = 5
                         break
                     
-                    elif event.key == keyboard.KeyCode(char= '7') and cls.Meta.game_process [6] == '.':
-                        cls.save_and_check(6)
+                    elif event.key == keyboard.KeyCode(char= '7') and cls.Meta.game_process[6] == '.':
+                        cls.Meta.numeric_key = 6
                         break
                     
-                    elif event.key == keyboard.KeyCode(char= '8') and cls.Meta.game_process [7] == '.':
-                        cls.save_and_check(7)
+                    elif event.key == keyboard.KeyCode(char= '8') and cls.Meta.game_process[7] == '.':
+                        cls.Meta.numeric_key = 7
                         break
                     
-                    elif event.key == keyboard.KeyCode(char= '9') and cls.Meta.game_process [8] == '.':
-                        cls.save_and_check(8)
+                    elif event.key == keyboard.KeyCode(char= '9') and cls.Meta.game_process[8] == '.':
+                        cls.Meta.numeric_key = 8
                         break
 
                 # Win Scan
                 elif cls.Meta.position == 'Win':
                     if event.key == keyboard.Key.esc:
-                        cls.show_menu() 
-                        break
-
-                
+                        break                      
 
 
+        if cls.Meta.position == 'Main':         
+            cls.enter_menu(cls.Meta.counter) 
+        elif cls.Meta.position == 'About' or cls.Meta.position == 'AskName' or cls.Meta.position == 'Settings' or cls.Meta.position == 'Score' or cls.Meta.position == 'Win':
+            cls.show_menu() 
+        elif cls.Meta.position == 'Board':
+            cls.save_and_check(cls.Meta.numeric_key)            
 
 
 game = TicTacToe()

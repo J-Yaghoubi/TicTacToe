@@ -1,7 +1,9 @@
 
 import settings as se
 
-
+"""
+    We stored Graphical object in this class
+"""
 
 LOGO_F ="""  
               ___           ___           ___     
@@ -49,10 +51,6 @@ ABOUT = f"""{se.FREE_COLOR+'94m'}              ╲ ▁▂▁ ╱
 {se.FREE_COLOR+'62m'}              ██   ██          {se.MENU_COLOR} ---------------------  
 """
 
-
-BOARD = ['| 1 |' , '| 2 |' , '| 3 |',
-         '| 4 |' , '| 5 |' , '| 6 |', 
-         '| 7 |' , '| 8 |' , '| 9 |']
 
 
 COMING = f'\n\n\n\n\n\n\t\t\t {se.MENU_COLOR}Coming Soon... \n\n\n\n\n\n'
