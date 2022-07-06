@@ -12,18 +12,18 @@ class functionality:
     def animate_logo():
         for i in range(10,-1,-1):
             utility.clear_screen()
-            print('\u001b[32m' + vs.LOGO_F)            
+            print(se.LOGO_COLOR + vs.LOGO_F)            
             print('\n' * i)
-            print('\u001b[32m' + vs.LOGO_M) 
+            print(se.LOGO_COLOR  + vs.LOGO_M) 
             print('\n' * i) 
-            print('\u001b[32m' + vs.LOGO_L)   
+            print(se.LOGO_COLOR  + vs.LOGO_L)   
             time.sleep(0.1)  
 
 
     def show_logo():
         utility.clear_screen()
         print('\n\n' + vs.dash_line)
-        print('\u001b[32m' + vs.LOGO_FULL) 
+        print(se.LOGO_COLOR  + vs.LOGO_FULL) 
         print('\n') 
 
 
@@ -35,6 +35,24 @@ class functionality:
 
         print('\n\n' + vs.dash_line)
         print(vs.main_menu_help)
+
+
+    def animate_dice(starter):
+        for i in range(len(vs.LOADING)):
+            functionality.show_logo()
+            print(se.LOGO_COLOR + '\n\n\n')
+            print('Rolling Dice...'.center(66))
+            print(se.BOARD_COLOR + vs.LOADING[i].center(66))    
+            print('\n\n\n\n' + vs.dash_line) 
+            print(vs.dice_help)          
+            time.sleep(0.5)  
+
+        functionality.show_logo()
+        print(se.BOARD_COLOR + '\n\n\n')
+        print(f'{starter} will start the game'.center(66))
+        print('\n\n\n\n\n' + vs.dash_line)
+        print(vs.dice_help)     
+        time.sleep(3)
 
 
     def show_board(process: list):
@@ -52,8 +70,9 @@ class functionality:
 
     def show_win(winner):
         functionality.show_logo()
-        print(f'\n\n\n \t\t {winner} is Winner \n\n\n')
-        print('\n' + vs.dash_line)  
+        print('\n\n\n')
+        print(f'{winner} is Winner'.center(66))
+        print('\n\n\n\n\n\n' + vs.dash_line)  
         print(vs.about_help)  
 
 
@@ -67,7 +86,7 @@ class functionality:
 
     def show_about():
         utility.clear_screen()
-        print('\n\n' + vs.dash_line + '\n\n')
+        print('\n\n\n' + vs.dash_line + '\n\n\n\n')
         print(vs.ABOUT)
         print('\n' + vs.dash_line)  
         print(vs.about_help)  

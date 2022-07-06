@@ -1,6 +1,7 @@
 
 import sys
 from pynput import keyboard
+from random import randint
 from funcs import functionality as fn
 import settings as se
 
@@ -42,7 +43,7 @@ class TicTacToe:
         
     @classmethod
     def enter_menu(cls, selected: int):
-        if   selected == 0: cls.ask_name()
+        if   selected == 0: cls.animate_dice()
         elif selected == 1: cls.show_score()
         elif selected == 2: cls.show_settings()
         elif selected == 3: cls.show_about()
@@ -58,6 +59,16 @@ class TicTacToe:
         #     cls.Meta.p_one_name = input('\nEnter Player One Name: ')
         #     cls.Meta.p_two_name = input('\nEnter Player TWo Name: ')
 
+        cls.show_board()
+
+    @classmethod
+    def animate_dice(cls):
+        # Select One player as starter randomly and show animation
+        cls.Meta.player_one = randint(0,1)
+        fn.animate_dice(cls.Meta.p_one_name) if cls.Meta.player_one else fn.animate_dice(cls.Meta.p_two_name) 
+        cls.Meta.position = 'Dice'   
+
+        # Start the game     
         cls.show_board()
 
     @classmethod
@@ -197,7 +208,7 @@ class TicTacToe:
 
         if cls.Meta.position == 'Main':         
             cls.enter_menu(cls.Meta.counter) 
-        elif cls.Meta.position == 'About' or cls.Meta.position == 'AskName' or cls.Meta.position == 'Settings' or cls.Meta.position == 'Score' or cls.Meta.position == 'Win':
+        elif cls.Meta.position == 'About' or cls.Meta.position == 'Dice' or cls.Meta.position == 'Settings' or cls.Meta.position == 'Score' or cls.Meta.position == 'Win':
             cls.show_menu() 
         elif cls.Meta.position == 'Board':
             cls.save_and_check(cls.Meta.numeric_key)            

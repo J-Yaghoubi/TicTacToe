@@ -55,6 +55,7 @@ ABOUT = f"""{se.FREE_COLOR+'94m'}              ╲ ▁▂▁ ╱
 
 COMING = f'\n\n\n\n\n\n\t\t\t {se.MENU_COLOR}Coming Soon... \n\n\n\n\n\n'
 
+LOADING = ['[=     ]', '[~<    ]', '[~~=   ]', '[~~~<  ]', '[ ~~~= ]', '[  ~~~<]', '[   ~~~]', '[    ~~]', '[     ~]', '[      ]']
 
 main_menu = ['] New Game', '] Score Board', '] Settings', '] Info', '] Quit']
 dash_line = se.START_MARGIN + "-" * 49
@@ -62,6 +63,7 @@ main_menu_help = se.HELP_COLOR + se.START_MARGIN + '*Please select one menu and 
 
 
 about_help = se.HELP_COLOR + se.START_MARGIN + '*Press Esc for BackToMain...\n'
+dice_help = se.HELP_COLOR + se.START_MARGIN + '*Breathe with deep...\n'
 
 
 
