@@ -41,7 +41,7 @@ class TicTacToe:
         cls.scan_input()
         
     @classmethod
-    def enter_menu(cls, selected):
+    def enter_menu(cls, selected: int):
         if   selected == 0: cls.ask_name()
         elif selected == 1: cls.show_score()
         elif selected == 2: cls.show_settings()
@@ -86,7 +86,7 @@ class TicTacToe:
         cls.scan_input()
 
     @classmethod
-    def save_and_check(cls, num):
+    def save_and_check(cls, num: int):
         """
             Save User selection and check if there is a winner or the game has be ended without any winner   
         """
@@ -107,7 +107,7 @@ class TicTacToe:
         if not '.' in cls.Meta.game_process:
             cls.Meta.position = 'Win'
             end = True
-            fn.show_win('No One Wins')             
+            fn.show_win('No One')             
              
         # if game is in process then: Toggle player and Update the Board
         if not end:
